@@ -44,7 +44,7 @@ const Footer = () => {
         {[
           { label: 'GitHub', href: 'https://github.com/JeneelPanchalV', external: true },
           { label: 'LinkedIn', href: 'https://www.linkedin.com/in/jeneel-panchal-lu767ffy', external: true },
-          { label: 'Resume', href: '/jeneel-panchal-resume.pdf', external: true },
+          { label: 'Resume', href: `${import.meta.env.BASE_URL}jeneel-panchal-resume.pdf`, external: true },
           { label: 'Contact Me', href: 'mailto:jeneelpanchal74@gmail.com', external: false },
         ].reduce<React.ReactNode[]>((acc, link, i, arr) => {
           acc.push(

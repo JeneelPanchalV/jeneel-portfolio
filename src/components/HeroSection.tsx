@@ -103,7 +103,7 @@ const HeroSection = () => {
         muted
         playsInline
         preload="auto"
-        src="/avatar.mp4"
+        src={`${import.meta.env.BASE_URL}avatar.mp4`}
       />
       {/* Dark overlay */}
       <div className="absolute inset-0 bg-black/35 z-[2]" />
