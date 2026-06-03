@@ -1,3 +1,4 @@
+import GlobalEffects from './components/GlobalEffects';
 import HeroSection from './components/HeroSection';
 import MarqueeSection from './components/MarqueeSection';
 import AboutSection from './components/AboutSection';
@@ -7,14 +8,17 @@ import Footer from './components/Footer';
 
 function App() {
   return (
-    <main style={{ background: '#0C0C0C', overflowX: 'clip' }}>
-      <HeroSection />
-      <MarqueeSection />
-      <AboutSection />
-      <ServicesSection />
-      <ProjectsSection />
-      <Footer />
-    </main>
+    <>
+      <GlobalEffects />
+      <main style={{ background: '#0C0C0C', overflowX: 'clip' }}>
+        <HeroSection />
+        <MarqueeSection />
+        <AboutSection />
+        <ServicesSection />
+        <ProjectsSection />
+        <Footer />
+      </main>
+    </>
   );
 }
 

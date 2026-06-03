@@ -1,98 +1,91 @@
-import FadeIn from './FadeIn';
-import AnimatedText from './AnimatedText';
-import ContactButton from './ContactButton';
+import { useEffect, useRef } from 'react';
+
+const ABOUT_TEXT = "I'm Jeneel — an AI engineer who builds things that reach people, not just papers. I hold an M.S. in Artificial Intelligence and work with Python, PyTorch, TypeScript, and React, backed by tools like FastAPI, ChromaDB, and AWS. I care about the part most skip — making AI reliable enough to actually ship. Anyone can call a model. Knowing what to build around it is the skill.";
 
 const AboutSection = () => {
+  const sectionRef = useRef<HTMLElement>(null);
+  const textRef = useRef<HTMLParagraphElement>(null);
+
+  // Typewriter fires once when section scrolls into view (observes section, not empty <p>)
+  useEffect(() => {
+    const el = textRef.current;
+    const section = sectionRef.current;
+    if (!el || !section) return;
+
+    el.style.opacity = '0';
+    let typed = false;
+
+    const io = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting && !typed) {
+        typed = true;
+        io.unobserve(section);
+        el.style.opacity = '1';
+        let i = 0;
+
+        const typeChar = () => {
+          if (i < ABOUT_TEXT.length) {
+            el.textContent = ABOUT_TEXT.slice(0, ++i);
+            setTimeout(typeChar, 18);
+          } else {
+            const words = el.textContent!.trim().split(' ');
+            el.innerHTML = words
+              .map(word =>
+                `<span style="white-space:nowrap">${word.split('').map(ch => `<span class="wc">${ch}</span>`).join('')}</span>`
+              )
+              .join('<span class="wc" style="display:inline-block;min-width:0.32em"> </span>');
+          }
+        };
+        typeChar();
+      }
+    }, { threshold: 0.3 });
+
+    io.observe(section);
+    return () => io.disconnect();
+  }, []);
+
   return (
     <section
+      ref={sectionRef}
       id="about"
-      className="min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-20 relative gap-10 sm:gap-14 md:gap-16"
-      style={{ background: '#0C0C0C' }}
+      className="fade-section min-h-screen flex flex-col items-center justify-center px-5 sm:px-8 md:px-10 py-24 relative gap-0"
+      style={{
+        background: '#0C0C0C',
+        borderRadius: '40px 40px 0 0',
+        marginTop: -40,
+        zIndex: 5,
+      }}
     >
-      {/* Top-left: moon */}
-      <FadeIn
-        delay={0.1}
-        x={-80}
-        y={0}
-        duration={0.9}
-        className="absolute top-[4%] left-[1%] sm:left-[2%] md:left-[4%] w-[120px] sm:w-[160px] md:w-[210px]"
-      >
-        <img
-          src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/moon_icon.11395d36.png"
-          alt=""
-          className="w-full h-auto"
-        />
-      </FadeIn>
-
-      {/* Top-right: lego */}
-      <FadeIn
-        delay={0.15}
-        x={80}
-        y={0}
-        duration={0.9}
-        className="absolute top-[4%] right-[1%] sm:right-[2%] md:right-[4%] w-[120px] sm:w-[160px] md:w-[210px]"
-      >
-        <img
-          src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/lego_icon-1.703bb594.png"
-          alt=""
-          className="w-full h-auto"
-        />
-      </FadeIn>
-
-      {/* Bottom-left: p59 */}
-      <FadeIn
-        delay={0.25}
-        x={-80}
-        y={0}
-        duration={0.9}
-        className="absolute bottom-[8%] left-[3%] sm:left-[6%] md:left-[10%] w-[100px] sm:w-[140px] md:w-[180px]"
-      >
-        <img
-          src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/p59_1.4659672e.png"
-          alt=""
-          className="w-full h-auto"
-        />
-      </FadeIn>
-
-      {/* Bottom-right: group_134 */}
-      <FadeIn
-        delay={0.3}
-        x={80}
-        y={0}
-        duration={0.9}
-        className="absolute bottom-[8%] right-[3%] sm:right-[6%] md:right-[10%] w-[130px] sm:w-[170px] md:w-[220px]"
-      >
-        <img
-          src="https://shrug-person-78902957.figma.site/_components/v2/ebb2b8f25d8e24d5f0a5ca8af4c950de81aa2fd7/Group_134-1.2e04f3ce.png"
-          alt=""
-          className="w-full h-auto"
-        />
-      </FadeIn>
-
       {/* Heading */}
-      <FadeIn delay={0} y={40}>
-        <h2
-          className="hero-heading font-black uppercase leading-none tracking-tight text-center"
-          style={{ fontSize: 'clamp(3rem, 12vw, 160px)' }}
-        >
-          About me
-        </h2>
-      </FadeIn>
-
-      {/* Paragraph with character reveal */}
-      <AnimatedText
-        text="I'm an AI engineer pursuing my Master's in Artificial Intelligence at the University of Bridgeport, graduating in May 2026. I focus on building production AI systems — RAG pipelines, computer vision, and full-stack applications that ship. I enjoy working on problems where models meet interfaces, making AI that's both technically sound and genuinely useful. Let's build something incredible together!"
-        className="font-medium text-center leading-relaxed max-w-[560px]"
+      <h2
+        className="about-h2 wave-text hero-heading font-normal uppercase leading-none tracking-tight text-center mb-12"
         style={{
+          fontFamily: "'Anton', sans-serif",
+          fontSize: 'clamp(3rem, 12vw, 160px)',
+        }}
+      >
+        Who am I
+      </h2>
+
+      {/* Status pill */}
+      <div className="flex gap-4 mb-11 flex-wrap justify-center">
+        <span className="status-pill">🎓 UB · Master's AI · May 2026</span>
+      </div>
+
+      {/* About text with typewriter + wave */}
+      <p
+        ref={textRef}
+        className="about-text wave-text text-center"
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontWeight: 400,
+          fontSize: 13.5,
+          lineHeight: 1.7,
           color: '#D7E2EA',
-          fontSize: 'clamp(1rem, 2vw, 1.35rem)',
+          maxWidth: 540,
+          opacity: 0.85,
+          marginBottom: 48,
         }}
       />
-
-      {/* Spacer before button */}
-      <div className="mt-6 sm:mt-10 md:mt-12">
-        <ContactButton />
-      </div>
     </section>
   );
 };
